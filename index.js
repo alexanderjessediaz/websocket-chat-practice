@@ -10,6 +10,9 @@ const io = require("socket.io")(http, {
 
 io.on("connection", socket => {
     console.log("A user connected")
+    socket.on("chat message", message => {
+        io.emit("chat message",message)
+    })
 });
 
 http.listen(4000, () => {

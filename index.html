@@ -16,11 +16,26 @@
   <body>
     <ul id="messages"></ul>
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      <input name="message" id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
     <script>
         const socket = io("ws://localhost:4000")
+        const $ul = document.querySelector("#messages")
+
+        const $form = document.querySelector("form")
+        $form.addEventListener("submit", e => {
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            socket.emit("chat message", formData.get("message"))
+            e.target.reset()
+        })
+
+        socket.on("chat message", message => {
+            const $li = document.createElement("li")
+            $li.textContent = message
+            $ul.append($li)
+        })
     </script>
   </body>
 </html>
